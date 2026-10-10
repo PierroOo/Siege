@@ -65,7 +65,8 @@ public class Projectil : MonoBehaviour
                 if (impactPrefab != null)
                 {
                     Impact impact = Instantiate(impactPrefab, transform.position, Quaternion.identity).GetComponent<Impact>();
-                    impact.SetTeam(team);
+                    if(impact != null)
+                        impact.SetTeam(team);
                 }
 
                 BaseEntity entity = hit.collider.GetComponent<BaseEntity>();
@@ -95,9 +96,10 @@ public class Projectil : MonoBehaviour
     }
 
     public void Kill(float deathTime)
-    { 
+    {
         Destroy(gameObject, deathTime);
         this.enabled = false;
+        enabled = false;
     }
 
     public void SetTeam(GameManager.PlayerType team)

@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
   prefab: {fileID: 6481296099794476315, guid: c7cdfee3f4d4533409d9148adce3a66a, type: 3}
   team: 0
-  count: 6
+  count: 1
   roundFrequency: 0
   randomOffset: 1
   groundMask:
@@ -1069,7 +1069,7 @@ GameObject:
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &423070355
 Transform:
   m_ObjectHideFlags: 0
@@ -1687,7 +1687,7 @@ GameObject:
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &725996837
 Transform:
   m_ObjectHideFlags: 0
@@ -1717,7 +1717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
   prefab: {fileID: 6481296099794476315, guid: ca2e08dc233968a45af3113ac5274e01, type: 3}
   team: 1
-  count: 40
+  count: 1
   roundFrequency: 0
   randomOffset: 10
   groundMask:

@@ -113,4 +113,4 @@ MonoBehaviour:
   rayDeltaTime: 0.1
   orientType: 0
   killDelay: 2
-  impactPrefab: {fileID: 0}
+  impactPrefab: {fileID: 8610490212735238937, guid: 15fcb9b78e6d5f44eaaa923c0214aa20, type: 3}
