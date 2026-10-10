@@ -35,7 +35,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &441157920446129820
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,6 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &-3245887165878729455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,8 +106,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectil
   damage: 4
-  weight: 0.3
+  weight: 0.1
+  stuntTime: 0
   maxLifeTime: 4
   spriteRenderer: {fileID: 441157920446129820}
   rayDeltaTime: 0.1
-  sprite: {fileID: 0}
+  orientType: 0
+  killDelay: 2
+  impactPrefab: {fileID: 0}

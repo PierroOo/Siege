@@ -21,6 +21,14 @@ PrefabInstance:
       value: 22
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: actionClip
+      value: 
+      objectReference: {fileID: 6418180475301049370, guid: 51b6202a7c15e0348a6f565327edf391, type: 2}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: debugAgent
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: hitPriority
       value: 1.5
       objectReference: {fileID: 0}
@@ -30,11 +38,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: maxHealthPoints
-      value: 60
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: actionKeepInertia
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: detectionIdleRadius
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: detectionMask.m_Bits
       value: 448
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: detectionActionRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: targetDestinationExtend
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 822937344072205319, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_Name
@@ -142,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_Speed
-      value: 12
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_Acceleration

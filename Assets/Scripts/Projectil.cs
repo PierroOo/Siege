@@ -10,6 +10,7 @@ public class Projectil : MonoBehaviour
 
     public int damage = 4;
     public float weight = 1f;
+    public float stuntTime = 0.1f;
 
     public float maxLifeTime = 6f;
     float timer;
@@ -26,6 +27,8 @@ public class Projectil : MonoBehaviour
     public float killDelay = 2f;
 
     public GameObject impactPrefab;
+
+    GameManager.PlayerType team;
 
     public void AddForce(Vector3 velocity)
     {
@@ -60,12 +63,15 @@ public class Projectil : MonoBehaviour
                 position = hit.point;
 
                 if (impactPrefab != null)
-                    Instantiate(impactPrefab, transform.position, Quaternion.identity);
+                {
+                    Impact impact = Instantiate(impactPrefab, transform.position, Quaternion.identity).GetComponent<Impact>();
+                    impact.SetTeam(team);
+                }
 
                 BaseEntity entity = hit.collider.GetComponent<BaseEntity>();
                 if (entity != null)
                 {
-                    entity.Hit(damage, velocity * weight);
+                    entity.Hit(damage, velocity * weight, stuntTime);
                     Kill(0f);
                 }
                 else
@@ -96,6 +102,7 @@ public class Projectil : MonoBehaviour
 
     public void SetTeam(GameManager.PlayerType team)
     {
+        this.team = team;
         spriteRenderer.color = GameManager.GetTeamColor(team);
         collisionMask = GameManager.GetTeamCollisionLayer(team);
     }

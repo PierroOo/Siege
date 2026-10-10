@@ -7,6 +7,8 @@ public class Impact : MonoBehaviour
     public float force = 1f;
 
     public float killDelay = 1f;
+
+    public SpriteRenderer spriteRenderer;
     void Start()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
@@ -22,5 +24,9 @@ public class Impact : MonoBehaviour
         }
 
         Destroy(gameObject, killDelay);
+    }
+    public void SetTeam(GameManager.PlayerType team)
+    {
+        spriteRenderer.color = GameManager.GetTeamColor(team);
     }
 }

@@ -13,6 +13,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: actionClip
+      value: 
+      objectReference: {fileID: 6418180475301049370, guid: 1876c7aab0fc6464393428f36f3b628b, type: 2}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: detectionMask.m_Bits
       value: 448
       objectReference: {fileID: 0}
@@ -95,6 +99,10 @@ PrefabInstance:
     - target: {fileID: 5124133462881138201, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: m_Speed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8926269892209584994, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_Size.x

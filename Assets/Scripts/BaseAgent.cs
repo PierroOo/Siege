@@ -1,14 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.XR;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.InputSystem.OnScreen.OnScreenStick;
-using static UnityEngine.UI.GridLayoutGroup;
+using UnityEngine.Audio;
 
 public class BaseAgent : BaseEntity
 {
@@ -32,7 +26,21 @@ public class BaseAgent : BaseEntity
     public float destinationDistanceAction = 0f;
     public float destinationDistanceMove = 0f;
 
-    
+    public AudioSource audioSource;
+    public AudioResource spawnClip;
+    public AudioResource actionClip;
+    public AudioResource deathClip;
+    public AudioResource onGroundClip;
+    public AudioResource orderClip;
+    public void PlayAudio(AudioResource clip)
+    {
+        if (clip == null)
+            return;
+
+        audioSource.resource = clip;
+        audioSource.Play();
+    }
+
     public enum AgentBehaviour { noTarget, haveTarget}
     public AgentBehaviour behaviour { get; private set; }
 
@@ -69,6 +77,11 @@ public class BaseAgent : BaseEntity
         if (defenders.Contains(this))
             defenders.Remove(this);
     }
+    private void Start()
+    {
+        playerOrderDestination = transform.position;
+    }
+
     public override void Select()
     {
         base.Select();
@@ -82,24 +95,40 @@ public class BaseAgent : BaseEntity
         //UpdateCursorTargetVisibility();
     }
 
-    protected override void ApplyTarget(Vector3 targetDestination)
+    //Ordre du joueur
+    Vector3 playerOrderDestination;
+    public enum OrderType {Player,Detection}
+    OrderType orderType;
+
+    protected override void ApplyPlayerOrder(Vector3 targetDestination)
     {
-        MoveTo(targetDestination);
+        playerOrderDestination = targetDestination;
+        RefreshPlayerOrder();
+        Focus();
+    }
+    public void RefreshPlayerOrder()
+    {
+        MoveTo(playerOrderDestination, OrderType.Player);
     }
 
-
-    public void MoveTo(Vector3 destination)
+    public void MoveTo(Vector3 destination, OrderType orderType)
     {
         navMeshAgent.stoppingDistance = destinationDistanceMove;
-        MoveTo(destination, null);
-    }
-    public void MoveTo(BaseAgent target)
+        m_MoveTo(destination, null, orderType);
+}
+    public void MoveTo(BaseAgent target, OrderType orderType)
     {
         navMeshAgent.stoppingDistance = destinationDistanceAction;
-        MoveTo(target.footPoint, target);
+        /*if (targetDestinationExtend > 0f)
+        {
+            Vector3 direction = (target.footPoint - footPoint).normalized;
+            m_MoveTo(target.footPoint + direction * targetDestinationExtend, target, orderType);
+        }
+        else*/
+        m_MoveTo(target.footPoint, target, orderType);
     }
 
-    void MoveTo(Vector3 destination, BaseAgent target)
+    void m_MoveTo(Vector3 destination, BaseAgent target, OrderType orderType)
     {
         if (!navMeshAgentAvailable)
             return;
@@ -108,21 +137,19 @@ public class BaseAgent : BaseEntity
 
         agentTarget = target;
         behaviour = AgentBehaviour.haveTarget;
+        this.orderType = orderType;
 
-        
         SetDestination(destination);
 
         HUDManager.instance.DrawSelection(this);
-
-        OnOrder();
     }
 
-    float lastOrderTime = float.MinValue;
+    float lastFocusTime = float.MinValue;
     public float focusTime = 2f;
-    public bool isFocus => lastOrderTime + focusTime > Time.time;
-    void OnOrder()
+    public bool isFocus => lastFocusTime + focusTime > Time.time;
+    void Focus()
     {
-        lastOrderTime = Time.time;
+        lastFocusTime = Time.time;
     }
 
 
@@ -134,15 +161,30 @@ public class BaseAgent : BaseEntity
     public float hitPriority = 1f;
     public float hitForce = 4f;
 
+    public bool actionKeepInertia;
+    //public float targetDestinationExtend = 0f;
+
+    public bool debugAgent;
+
     public void TryAction(BaseAgent target)
     {
         if (paralyzed && target.paralyzed)
             return;
 
         action.Action(this,target);
+
+        PlayAudio(actionClip);
+
+        if (actionKeepInertia)
+        {
+            if (physSequence != null)
+                StopCoroutine(physSequence);
+
+            physSequence = StartCoroutine(PhysSequence(Vector3.zero,0f));
+        }
     }
 
-    public override void Hit(int damage, Vector3 hitForce)
+    public override void Hit(int damage, Vector3 hitForce, float stuntTime)
     {
         healthPoints = Mathf.Clamp(healthPoints - damage, 0 , maxHealthPoints);
         if (healthPoints <= 0)
@@ -150,37 +192,82 @@ public class BaseAgent : BaseEntity
 
         lastHitTime = Time.time;
 
-        if (hitSequence != null)
-            StopCoroutine(hitSequence);
+        if (stuntTime > 0f)
+        {
+            if (physSequence != null)
+                StopCoroutine(physSequence);
 
-        hitSequence = StartCoroutine(HitSequence(hitForce));
+            physSequence = StartCoroutine(PhysSequence(hitForce, stuntTime));
+        }
+        else
+            navMeshAgent.velocity += hitForce;
 
         character.Hit(hitForce);
     }
 
-    Coroutine hitSequence;
-    public IEnumerator HitSequence(Vector3 hitForce)
+    Coroutine physSequence;
+    public IEnumerator PhysSequence(Vector3 hitForce, float minTime)
     {
-        rb.isKinematic = false;
+        if (rb.isKinematic)
+        {
+            //if (debugAgent)
+            //    Debug.Log("Start Hit, transfere V = nm: " + navMeshAgent.velocity + " > rb: "+ rb.linearVelocity);
+
+            rb.isKinematic = false;
+            rb.linearVelocity = navMeshAgent.velocity * 0.5f;
+        }
+        //else if (debugAgent)
+             //Debug.Log("Start X "+ minTime);
+
+        rb.AddForce(hitForce, ForceMode.Impulse);
+
         navMeshAgent.enabled = false;
 
-        rb.linearVelocity = hitForce;
+        //if (debugAgent)
+        //    Debug.Log("Stunt "+ minTime);
 
-        yield return new WaitForSeconds(1f);
+        if (minTime > 0f)
+            yield return new WaitForSeconds(minTime);
 
-        while (lastCollisionTime + 0.5f < Time.time)
+        while ( !rb.IsSleeping() && lastCollisionTime + 0.5f < Time.time || action.busy)
+        {
+            //Debug.Log(" - "+ (lastCollisionTime + 0.5f < Time.time) +" "+ action.busy);
             yield return null;
+        }
 
-        rb.isKinematic = true;
+        //if (debugAgent)
+        //    Debug.Log("End Hit, transfere V = rb: " + rb.linearVelocity + " > nm: " + navMeshAgent.velocity);
+
         navMeshAgent.enabled = true;
+        navMeshAgent.velocity = rb.linearVelocity;
+        rb.isKinematic = true;
+
+        RefreshNavMeshMovement();
+
+        if (debugAgent)
+            Debug.Log("Phys End");
     }
     bool navMeshAgentAvailable => navMeshAgent.enabled && rb.isKinematic;
 
     float lastCollisionTime = float.MinValue;
     private void OnCollisionStay(Collision collision)
     {
+        //if (debugAgent)
+        //    Debug.Log("OnCollisionStay");
+
         if(collision.gameObject.layer == 0)
             lastCollisionTime = Time.time;
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        //if (debugAgent)
+        //    Debug.Log("OnCollisionEnter");
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        //if (debugAgent)
+        //    Debug.Log("OnCollisionExit");
     }
 
     public void Heal(int healPoints)
@@ -191,7 +278,8 @@ public class BaseAgent : BaseEntity
     public override void Kill()
     {
         healthPoints = 0;
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        base.Kill();
     }
 
     public void StopOrder()
@@ -204,19 +292,32 @@ public class BaseAgent : BaseEntity
 
     public void FixedUpdate()
     {
+        //if (debugAgent)
+        //    Debug.Log("nm: " + navMeshAgent.velocity + " rb: " + rb.linearVelocity);
+        if (debugAgent)
+            Debug.DrawLine(transform.position + Vector3.up, m_destination + Vector3.up, Color.red);
+
         if (paralyzed)
+        {
+            //if (debugAgent)
+            //    Debug.Log("paralyzed");
             return;
+        }
 
         if (behaviour == AgentBehaviour.haveTarget)
         {
+            if (debugAgent)
+                for (int i = 1; i < navMeshAgent.path.corners.Length; i++)
+                    Debug.DrawLine(navMeshAgent.path.corners[i - 1] + Vector3.up, navMeshAgent.path.corners[i] + Vector3.up, Color.yellow, 1f);
+
+            
+
             if (navMeshAgentAvailable && agentTarget != null && Vector3.Distance(m_destination, agentTarget.footPoint) > 1f)
                 SetDestination(agentTarget.footPoint);
-
-            for (int i = 1; i < navMeshAgent.path.corners.Length; i++)
-                Debug.DrawLine(navMeshAgent.path.corners[i - 1] + Vector3.up, navMeshAgent.path.corners[i] + Vector3.up, Color.yellow, 1f);
-
-            if (agentTarget == null && Distance2D(transform.position, m_destination) < 1f)
+            else if ( agentTarget == null && Distance2D(transform.position, m_destination) < 1f)
+            {
                 StopOrder();
+            }
         }
 
         if (agentTarget != null && Vector3.Distance(transform.position, agentTarget.transform.position) < actionDistance)
@@ -227,8 +328,12 @@ public class BaseAgent : BaseEntity
     {
         m_destination = newDestination;
 
+        RefreshNavMeshMovement();
+    }
+    void RefreshNavMeshMovement()
+    {
         if (navMeshAgent.stoppingDistance == 0f || (transform.position - m_destination).sqrMagnitude > navMeshAgent.stoppingDistance * navMeshAgent.stoppingDistance)
-            navMeshAgent.destination = newDestination;
+            navMeshAgent.destination = m_destination;
     }
 
     public float Distance2D(Vector3 A , Vector3 B)
@@ -261,6 +366,10 @@ public class BaseAgent : BaseEntity
             {
                 Vector3 position = transform.position;
                 float detectionRadius = behaviour == AgentBehaviour.noTarget ? detectionIdleRadius : detectionActionRadius;
+
+                //if(targetDestinationExtend > 0f)
+                //    position += detectionRadius
+
                 int detectionCount = Physics.OverlapSphereNonAlloc(position, detectionRadius, detections, detectionMask);
 
                 float closestDistance = float.MaxValue;
@@ -283,9 +392,14 @@ public class BaseAgent : BaseEntity
                     BaseAgent detectedAgent = closestCollider.gameObject.GetComponent<BaseAgent>();
                     if (detectedAgent != null)
                     {
-                        MoveTo(detectedAgent);
+                        if(debugAgent)
+                            Debug.Log("DETECT");
+                        MoveTo(detectedAgent, OrderType.Detection);
+                        Focus();
                     }
                 }
+                else if (orderType == OrderType.Detection)
+                    RefreshPlayerOrder();
             }
             yield return new WaitForSeconds(1f/ detectionPerSecond);
         }

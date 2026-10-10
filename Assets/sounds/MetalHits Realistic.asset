@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-4573545748271114474
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Trimmed_hit metal 0_{-4573545748271114474}
+  m_AudioClip: {fileID: 8300000, guid: 9b7eebb5834a0034dab2ac3f70001328, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &1501656449724453647
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Trimmed_hit metal 4_{1501656449724453647}
+  m_AudioClip: {fileID: 8300000, guid: ed8b473a056c74b4ca3f3a731dfb9d8a, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &3670989393912707733
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Trimmed_metal scratch_{3670989393912707733}
+  m_AudioClip: {fileID: 8300000, guid: 50357b004a154854aaf8eb4984bbe6cb, type: 3}
+  m_Volume: 0
+  m_Enabled: 0
+--- !u!1233149941 &3948817461224805753
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Trimmed_metal scratch 2_{3948817461224805753}
+  m_AudioClip: {fileID: 8300000, guid: 3542b4e1b1df3cb4880f83de79bee448, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &4983054677763615521
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Trimmed_rapid metal scratch_{4983054677763615521}
+  m_AudioClip: {fileID: 8300000, guid: 6ceac1df1eacbf845b669244255c45bf, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MetalHits Realistic
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: -10.78167, y: 10.78167}
+  m_PitchRandomizationRange: {x: -443.1267, y: 436.6576}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -4573545748271114474}
+  - {fileID: 1501656449724453647}
+  - {fileID: 3670989393912707733}
+  - {fileID: 3948817461224805753}
+  - {fileID: 4983054677763615521}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 1
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 1
+  m_VolumeRandomizationEnabled: 1
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0

@@ -107,6 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectil
   damage: 4
   weight: 2
+  stuntTime: 1
   maxLifeTime: 4
   spriteRenderer: {fileID: 441157920446129820}
   rayDeltaTime: 0.1

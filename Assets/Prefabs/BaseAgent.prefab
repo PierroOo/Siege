@@ -85,6 +85,7 @@ MonoBehaviour:
   cursorSelect: {fileID: 2806095797796151136}
   cursorTarget: {fileID: 3540998348058066023}
   team: 2
+  deathPrefab: {fileID: 2982354840968396331, guid: 6675750b6b482dc4ba6517abf4b707b6, type: 3}
   maxHealthPoints: 20
   maxAttack: 8
   agentTarget: {fileID: 0}
@@ -92,16 +93,22 @@ MonoBehaviour:
   actionDistance: 3
   destinationDistanceAction: 0
   destinationDistanceMove: 0
+  audioSource: {fileID: 2705826062071121789}
+  spawnClip: {fileID: 0}
+  actionClip: {fileID: 0}
+  deathClip: {fileID: 0}
+  onGroundClip: {fileID: 0}
+  orderClip: {fileID: 0}
   xRayRenderer: {fileID: 4861157353814825111}
   focusTime: 2
+  hitTime: 0.5
   hitPriority: 1
   hitForce: 4
+  actionKeepInertia: 0
+  debugAgent: 0
   detectionPerSecond: 2
   detectionIdleRadius: 8
   detectionActionRadius: 4
-  detectionMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!54 &-640372155081052374
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -163,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7414051b4f6a7584c9137413ec046878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sword
+  actionTime: 1.5
 --- !u!1 &2613591057664562475
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,6 +229,7 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 0, z: 0.5}
   m_Size: {x: 1, y: 1, z: 1}
   m_FadeFactor: 1
+  m_VisibleInScene: 1
   version: 1
   m_DecalLayerMask: 1
 --- !u!1 &2806095797796151136
@@ -644,6 +653,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c65ee5b00f6a454caefa0c046ecd3e1, type: 3}
+--- !u!82 &2705826062071121789 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5173914542606214398, guid: 3c65ee5b00f6a454caefa0c046ecd3e1, type: 3}
+  m_PrefabInstance: {fileID: 7079774795507377027}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7885136549761959607 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1093750464441869620, guid: 3c65ee5b00f6a454caefa0c046ecd3e1, type: 3}

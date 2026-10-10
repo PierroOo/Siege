@@ -21,8 +21,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: deathPrefab
+      value: 
+      objectReference: {fileID: 8610490212735238937, guid: 926a141e751c20d4d915caa7073e6f15, type: 3}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: actionDistance
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: maxHealthPoints
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: detectionIdleRadius
@@ -39,6 +47,10 @@ PrefabInstance:
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: destinationDistanceAction
       value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: -640372155081052374, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: m_Mass
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 822937344072205319, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_Name
@@ -140,6 +152,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 2b84c07c53c23f040aee38057ab23dbe, type: 2}
+    - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: m_Speed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_StoppingDistance
       value: 200

@@ -23,7 +23,7 @@ public class Interactions : MonoBehaviour
     public void OnNextTurn(PlayerType player, int roundCount)
     {
         foreach (BaseEntity selectedEntity in selectedEntities)
-            selectedEntity.ApplyTarget();
+            selectedEntity.ApplyOrder();
 
         Reset();
         canInteract = player != PlayerType.Neutral;
@@ -59,20 +59,20 @@ public class Interactions : MonoBehaviour
         if (Physics.Linecast(targetPosition + Vector3.up * 20f, targetPosition + Vector3.down * 20f,out hit, groundMask))
             targetPosition = hit.point;
 
-        entity.SetTarget(targetPosition);
+        entity.SetOrder(targetPosition);
     }
 
-    public void UntargetAll()
+    public void UnOrderAll()
     {
         foreach (BaseEntity selectedEntity in selectedEntities)
-            selectedEntity.Untarget();
+            selectedEntity.UnOrder();
         
         TargetArea.SetActive(false);
     }
 
     public void Reset()
     {
-        UntargetAll();
+        UnOrderAll();
         DeselectAll();
         mouseHold = false;
         orderState = OrderState.NoSelection;
@@ -121,7 +121,7 @@ public class Interactions : MonoBehaviour
                     Reset();
                     break;
                 case OrderState.SelectionAndTarget:
-                    UntargetAll();
+                    UnOrderAll();
                     mouseHold = false;
                     orderState = OrderState.Selection;
                     break;
