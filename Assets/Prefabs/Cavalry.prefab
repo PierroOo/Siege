@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Charge
   runningMinSpeed: 2
-  runningMinTime: 2
+  runningMinTime: 1.5
   radius: 3
   randomForceDirection: 0.6
   damage: 6
