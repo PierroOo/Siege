@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 using static GameManager;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
-    
+
+    public NavMeshSurface navMeshSurface;
 
     private void Awake()
     {
@@ -16,6 +18,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetGameState(GameState.Intro);
+        if(navMeshSurface.navMeshData == null)
+            navMeshSurface.BuildNavMesh();
     }
 
     public enum PlayerType { Assailant, Defender, Neutral}
