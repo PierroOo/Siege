@@ -57,7 +57,7 @@ public class Projectil : MonoBehaviour
         if (lastRayTime + rayDeltaTime < Time.time)
         {
             lastRayTime = Time.time;
-            Debug.DrawLine(lastPosition, position,Color.gray,2f);
+            //Debug.DrawLine(lastPosition, position,Color.gray,2f);
             if (Physics.Linecast(lastPosition, position, out hit, collisionMask))
             {
                 position = hit.point;

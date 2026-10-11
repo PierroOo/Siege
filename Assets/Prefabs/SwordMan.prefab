@@ -17,6 +17,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6418180475301049370, guid: 1876c7aab0fc6464393428f36f3b628b, type: 2}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: maxHealthPoints
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: detectionMask.m_Bits
       value: 448
       objectReference: {fileID: 0}

@@ -25,6 +25,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: maxHealthPoints
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: detectionIdleRadius
       value: 18
       objectReference: {fileID: 0}
@@ -129,6 +133,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 5ea116e5e3bef1e48a2b23bd2f9c4106, type: 2}
     - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
+      propertyPath: m_Speed
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 8593596434325109829, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: m_StoppingDistance
       value: 200
       objectReference: {fileID: 0}
@@ -196,3 +204,4 @@ MonoBehaviour:
   randomForce: 4
   randomAim: 2
   spawnLocalPoint: {x: 0, y: 0.5, z: 0}
+  highArc: 0

@@ -15,8 +15,6 @@ public class BaseAgent : BaseEntity
     public override int attack => (int)Mathf.Max(1f, (float)maxAttack * ((float)healthPoints / (float)maxHealthPoints));
     public int maxAttack = 8;
 
-    
-    //public Vector3 destination => agentTarget != null ? agentTarget.footPoint : m_destination;
     Vector3 m_destination;
     public BaseAgent agentTarget;
     public BaseAction action;
@@ -25,6 +23,9 @@ public class BaseAgent : BaseEntity
 
     public float destinationDistanceAction = 0f;
     public float destinationDistanceMove = 0f;
+
+    AgentComponent component;
+    bool haveComponent;
 
     public AudioSource audioSource;
     public AudioResource spawnClip;
@@ -66,6 +67,9 @@ public class BaseAgent : BaseEntity
         character = GetComponentInChildren<Character>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        component = GetComponent<AgentComponent>();
+        haveComponent = component != null;
     }
     public new void OnDestroy()
     {
@@ -119,12 +123,6 @@ public class BaseAgent : BaseEntity
     public void MoveTo(BaseAgent target, OrderType orderType)
     {
         navMeshAgent.stoppingDistance = destinationDistanceAction;
-        /*if (targetDestinationExtend > 0f)
-        {
-            Vector3 direction = (target.footPoint - footPoint).normalized;
-            m_MoveTo(target.footPoint + direction * targetDestinationExtend, target, orderType);
-        }
-        else*/
         m_MoveTo(target.footPoint, target, orderType);
     }
 
@@ -152,12 +150,11 @@ public class BaseAgent : BaseEntity
         lastFocusTime = Time.time;
     }
 
-
     protected float lastHitTime = float.MinValue;
 
-    public bool stunt => lastHitTime + hitTime > Time.time;
-    public bool paralyzed => stunt || action.busy;
-    public float hitTime = 0.5f;
+    public bool invincible => (lastHitTime + invincibleTime) > Time.time;
+    public bool paralyzed => invincible || action.busy;
+    public float invincibleTime = 0.5f;
     public float hitPriority = 1f;
     public float hitForce = 4f;
 
@@ -210,65 +207,35 @@ public class BaseAgent : BaseEntity
     {
         if (rb.isKinematic)
         {
-            //if (debugAgent)
-            //    Debug.Log("Start Hit, transfere V = nm: " + navMeshAgent.velocity + " > rb: "+ rb.linearVelocity);
-
             rb.isKinematic = false;
             rb.linearVelocity = navMeshAgent.velocity * 0.5f;
         }
-        //else if (debugAgent)
-             //Debug.Log("Start X "+ minTime);
 
         rb.AddForce(hitForce, ForceMode.Impulse);
 
         navMeshAgent.enabled = false;
 
-        //if (debugAgent)
-        //    Debug.Log("Stunt "+ minTime);
-
         if (minTime > 0f)
             yield return new WaitForSeconds(minTime);
 
         while ( !rb.IsSleeping() && lastCollisionTime + 0.5f < Time.time || action.busy)
-        {
-            //Debug.Log(" - "+ (lastCollisionTime + 0.5f < Time.time) +" "+ action.busy);
             yield return null;
-        }
-
-        //if (debugAgent)
-        //    Debug.Log("End Hit, transfere V = rb: " + rb.linearVelocity + " > nm: " + navMeshAgent.velocity);
 
         navMeshAgent.enabled = true;
         navMeshAgent.velocity = rb.linearVelocity;
         rb.isKinematic = true;
 
         RefreshNavMeshMovement();
-
-        if (debugAgent)
-            Debug.Log("Phys End");
     }
     bool navMeshAgentAvailable => navMeshAgent.enabled && rb.isKinematic;
 
     float lastCollisionTime = float.MinValue;
     private void OnCollisionStay(Collision collision)
     {
-        //if (debugAgent)
-        //    Debug.Log("OnCollisionStay");
-
         if(collision.gameObject.layer == 0)
             lastCollisionTime = Time.time;
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        //if (debugAgent)
-        //    Debug.Log("OnCollisionEnter");
-    }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        //if (debugAgent)
-        //    Debug.Log("OnCollisionExit");
-    }
 
     public void Heal(int healPoints)
     { 
@@ -278,7 +245,6 @@ public class BaseAgent : BaseEntity
     public override void Kill()
     {
         healthPoints = 0;
-        //Destroy(gameObject);
         base.Kill();
     }
 
@@ -292,25 +258,17 @@ public class BaseAgent : BaseEntity
 
     public void FixedUpdate()
     {
-        //if (debugAgent)
-        //    Debug.Log("nm: " + navMeshAgent.velocity + " rb: " + rb.linearVelocity);
         if (debugAgent)
             Debug.DrawLine(transform.position + Vector3.up, m_destination + Vector3.up, Color.red);
 
         if (paralyzed)
-        {
-            //if (debugAgent)
-            //    Debug.Log("paralyzed");
             return;
-        }
 
         if (behaviour == AgentBehaviour.haveTarget)
         {
             if (debugAgent)
                 for (int i = 1; i < navMeshAgent.path.corners.Length; i++)
                     Debug.DrawLine(navMeshAgent.path.corners[i - 1] + Vector3.up, navMeshAgent.path.corners[i] + Vector3.up, Color.yellow, 1f);
-
-            
 
             if (navMeshAgentAvailable && agentTarget != null && Vector3.Distance(m_destination, agentTarget.footPoint) > 1f)
                 SetDestination(agentTarget.footPoint);
@@ -362,15 +320,16 @@ public class BaseAgent : BaseEntity
         yield return null;
         while (true)
         {
-            if (!isFocus)
+            if (!isFocus && (!haveComponent || component.detectionAllowed ) )
             {
                 Vector3 position = transform.position;
                 float detectionRadius = behaviour == AgentBehaviour.noTarget ? detectionIdleRadius : detectionActionRadius;
 
-                //if(targetDestinationExtend > 0f)
-                //    position += detectionRadius
-
-                int detectionCount = Physics.OverlapSphereNonAlloc(position, detectionRadius, detections, detectionMask);
+                int detectionCount;
+                if (detectionRadius > 0f)
+                    detectionCount = Physics.OverlapSphereNonAlloc(position, detectionRadius, detections, detectionMask);
+                else
+                    detectionCount = 0;
 
                 float closestDistance = float.MaxValue;
                 Collider closestCollider = null;
@@ -392,8 +351,6 @@ public class BaseAgent : BaseEntity
                     BaseAgent detectedAgent = closestCollider.gameObject.GetComponent<BaseAgent>();
                     if (detectedAgent != null)
                     {
-                        if(debugAgent)
-                            Debug.Log("DETECT");
                         MoveTo(detectedAgent, OrderType.Detection);
                         Focus();
                     }
@@ -418,6 +375,9 @@ public class BaseAgent : BaseEntity
         detectionMask = GameManager.GetTeamEnnemisLayer(team);
         xRayRenderer.material.color = GameManager.GetTeamColor(team);
         character.SetTeam(team);
+
+        if(component != null)
+            component.SetTeam(team);
     }
 
     private void OnDrawGizmosSelected()

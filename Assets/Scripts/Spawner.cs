@@ -75,7 +75,7 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, randomOffset);
     }

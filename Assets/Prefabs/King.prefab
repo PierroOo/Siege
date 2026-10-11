@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: hitForce
-      value: 15
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: maxAttack
@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 6418180475301049370, guid: 51b6202a7c15e0348a6f565327edf391, type: 2}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: debugAgent
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: hitPriority
@@ -38,22 +38,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: maxHealthPoints
-      value: 600
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: actionKeepInertia
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
-      propertyPath: detectionIdleRadius
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
       propertyPath: detectionMask.m_Bits
       value: 448
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
-      propertyPath: detectionActionRadius
+      propertyPath: components.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5370669362780159931, guid: fd4feab53ff89a74a8d9bdd4a2bb0801, type: 3}
